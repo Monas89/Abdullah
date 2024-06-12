@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عداد تنازلي</title>
+    <title>أنس - عداد تنازلي وتصاعدي</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,31 +11,108 @@
             background-color: #f0f0f0;
             color: #333;
             margin-top: 50px;
+            position: relative;
+        }
+        h1 {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #ff00ff, 0 0 15px #ff00ff, 0 0 20px #ff00ff, 0 0 25px #ff00ff, 0 0 30px #ff00ff, 0 0 35px #ff00ff;
+            margin-bottom: 50px;
         }
         .countdown-item {
             font-size: 2em;
-            margin: 10px 0;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 50px;
+            display: inline-block;
+            width: 180px;
+            height: 80px;
+            line-height: 60px;
         }
         .days {
+            background-color: #ffcccc; /* أحمر فاتح */
             color: #ff0000; /* أحمر */
         }
         .hours {
+            background-color: #ccccff; /* أزرق فاتح */
             color: #0000ff; /* أزرق */
         }
         .minutes {
+            background-color: #ccffcc; /* أخضر فاتح */
             color: #008000; /* أخضر */
         }
         .seconds {
+            background-color: #ffebcc; /* برتقالي فاتح */
             color: #ffa500; /* برتقالي */
         }
         .milliseconds {
+            background-color: #e6ccff; /* بنفسجي فاتح */
             color: #800080; /* بنفسجي */
+        }
+        .like-button {
+            font-size: 2em;
+            color: #ccc;
+            cursor: pointer;
+            position: relative;
+        }
+        .like-button.liked {
+            color: #ff0000;
+        }
+        .like-button::before {
+            content: '\2661'; /* Unicode للقلب */
+            font-size: inherit;
+        }
+        .like-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            opacity: 1;
+            color: #ff0000;
+            pointer-events: none;
+            transition: all 1s ease-out;
+        }
+        .like-count {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+        .message {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #ff00ff, 0 0 15px #ff00ff, 0 0 20px #ff00ff, 0 0 25px #ff00ff, 0 0 30px #ff00ff, 0 0 35px #ff00ff;
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+            pointer-events: none;
+            position: relative;
+        }
+        .countdown-section {
+            transition: transform 0.5s ease-in-out;
+        }
+        .date-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            font-size: 1em;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        #hijri-date,
+        #gregorian-date,
+        #cairo-time {
+            font-size: 0.5em;
+            color: black;
         }
     </style>
 </head>
 <body>
-    <h1>العداد التنازلي حتى 19 أغسطس 2024</h1>
-    <div id="countdown">
+    <h1>أنس</h1>
+    <div id="message-container" class="message"></div>
+    <div id="countdown" class="countdown-section">
         <div id="days" class="countdown-item days"></div>
         <div id="hours" class="countdown-item hours"></div>
         <div id="minutes" class="countdown-item minutes"></div>
@@ -43,16 +120,27 @@
         <div id="milliseconds" class="countdown-item milliseconds"></div>
     </div>
 
+    <div class="like-section">
+        <span id="like-button" class="like-button"></span>
+        <div id="like-count" class="like-count">0</div>
+    </div>
+
+    <div id="date-section" class="date-section">
+        <div id="gregorian-date"></div>
+        <div id="cairo-time"></div>
+        <div id="hijri-date"></div>
+    </div>
+
     <script>
         function updateCountdown() {
             const targetDate = new Date('August 19, 2024 00:00:00').getTime();
             const now = new Date().getTime();
-            const difference = targetDate - now;
+            let difference = targetDate - now;
 
             if (difference <= 0) {
-                document.getElementById('countdown').innerHTML = "لقد وصلنا!";
-                clearInterval(countdownInterval);
-                return;
+                // إذا تجاوزنا التاريخ المستهدف، قم بتغيير العداد إلى تصاعدي
+                difference = now - targetDate
+                ;
             }
 
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -68,7 +156,83 @@
             document.getElementById('milliseconds').innerHTML = milliseconds + " ملي ثانية";
         }
 
-        const countdownInterval = setInterval(updateCountdown, 1);
+        setInterval(updateCountdown, 1);
+
+        // زر الإعجاب
+        let likeCount = 0;
+        const likeButton = document.getElementById('like-button');
+        const likeCountDisplay = document.getElementById('like-count');
+
+        const messages = [
+            "سبحان الله وبحمده",
+            "سبحان الله العظيم",
+            "اللهم اغفر لي",
+            "اللهم صل على سيدنا محمد",
+            "اللهم تب علي",
+            "سبحانك اللهم وبحمدك عدد خلقك ورضا نفسك وزنة عرشك ومداد كلماتك",
+            "سبحان الله",
+            "الحمد لله",
+            "الله أكبر",
+            "لا حول ولا قوة إلا بالله العلي العظيم"
+        ];
+
+        const colors = [
+            "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6", "#FFBF33", "#8D33FF", "#FF5733", "#33FF57"
+        ];
+
+        let messageIndex = 0;
+
+        function showMessage() {
+            const messageText = messages[messageIndex];
+            const color = colors[messageIndex % colors.length];
+            messageIndex = (messageIndex + 1) % messages.length;
+
+            const messageContainer = document.getElementById('message-container');
+            messageContainer.innerText = messageText;
+            messageContainer.style.color = color;
+            messageContainer.style.opacity = 1;
+
+            const duration = messageText.length < 20 ? 2000 : 4000;
+
+            const countdownSection = document.getElementById('countdown');
+            countdownSection.style.transform = 'translateY(50px)';
+
+            setTimeout(() => {
+                messageContainer.style.opacity = 0;
+                countdownSection.style.transform = 'translateY(0)';
+            }, duration - 1000);
+
+            setTimeout(() => {
+                messageContainer.innerText = '';
+            }, duration);
+        }
+
+        likeButton.addEventListener('click', () => {
+            likeButton.classList.add('liked');
+            likeCount++;
+            likeCountDisplay.innerText = likeCount;
+
+            const animation = document.createElement('div');
+            animation.className = 'like-animation';
+            animation.innerHTML = '&hearts;';
+            document.body.appendChild(animation);
+
+            setTimeout(() => {
+                animation.style.fontSize = '10em';
+                animation.style.opacity = '1';
+                animation.style.transform = 'translate(-50%, -50%) scale(5)';
+            }, 10);
+
+            setTimeout(() => {
+                animation.style.opacity = 0;
+            }, 500);
+
+            setTimeout(() => {
+                animation.remove();
+            }, 1000);
+
+            showMessage();
+        });
     </script>
 </body>
 </html>
