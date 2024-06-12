@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عداد تنازلي</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            color: #333;
+            margin-top: 50px;
+        }
+        .countdown-item {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        .days {
+            color: #ff0000; /* أحمر */
+        }
+        .hours {
+            color: #0000ff; /* أزرق */
+        }
+        .minutes {
+            color: #008000; /* أخضر */
+        }
+        .seconds {
+            color: #ffa500; /* برتقالي */
+        }
+        .milliseconds {
+            color: #800080; /* بنفسجي */
+        }
+    </style>
+</head>
+<body>
+    <h1>العداد التنازلي حتى 19 أغسطس 2024</h1>
+    <div id="countdown">
+        <div id="days" class="countdown-item days"></div>
+        <div id="hours" class="countdown-item hours"></div>
+        <div id="minutes" class="countdown-item minutes"></div>
+        <div id="seconds" class="countdown-item seconds"></div>
+        <div id="milliseconds" class="countdown-item milliseconds"></div>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('August 19, 2024 00:00:00').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                document.getElementById('countdown').innerHTML = "لقد وصلنا!";
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            const milliseconds = difference % 1000;
+
+            document.getElementById('days').innerHTML = days + " يوم";
+            document.getElementById('hours').innerHTML = hours + " ساعة";
+            document.getElementById('minutes').innerHTML = minutes + " دقيقة";
+            document.getElementById('seconds').innerHTML = seconds + " ثانية";
+            document.getElementById('milliseconds').innerHTML = milliseconds + " ملي ثانية";
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1);
+    </script>
+</body>
+</html>
