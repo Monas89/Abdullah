@@ -132,107 +132,108 @@
     </div>
 
     <script>
-        function updateCountdown() {
-            const targetDate = new Date('August 21, 2024 12:30:15').getTime();
-            const now = new Date().getTime();
-            let difference = targetDate - now;
+    function updateCountdown() {
+        const targetDate = new Date('August 20, 2024 12:30:15').getTime();
+        const now = new Date().getTime();
+        let difference = targetDate - now;
 
-            if (difference <= 0) {
-                // إذا تجاوزنا التاريخ المستهدف، قم بتغيير العداد إلى تصاعدي
-                difference = now - targetDate
-                ;
-            }
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            const milliseconds = difference % 1000;
-
-            document.getElementById('days').innerHTML = days + " يوم";
-            document.getElementById('hours').innerHTML = hours + " ساعة";
-            document.getElementById('minutes').innerHTML = minutes + " دقيقة";
-            document.getElementById('seconds').innerHTML = seconds + " ثانية";
-            document.getElementById('milliseconds').innerHTML = milliseconds + " ملي ثانية";
+        if (difference <= 0) {
+            // إذا تجاوزنا التاريخ المستهدف، قم بتغيير العداد إلى تصاعدي
+            difference = now - targetDate;
         }
 
-        setInterval(updateCountdown, 1);
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        const milliseconds = difference % 1000;
 
-        // زر الإعجاب
-        let likeCount = 0;
-        const likeButton = document.getElementById('like-button');
-        const likeCountDisplay = document.getElementById('like-count');
+        document.getElementById('days').innerHTML = days + " يوم";
+        document.getElementById('hours').innerHTML = hours + " ساعة";
+        document.getElementById('minutes').innerHTML = minutes + " دقيقة";
+        document.getElementById('seconds').innerHTML = seconds + " ثانية";
+        document.getElementById('milliseconds').innerHTML = milliseconds + " ملي ثانية";
+    }
 
-        const messages = [
-            "سبحان الله وبحمده",
-            "سبحان الله العظيم",
-            "اللهم اغفر لي",
-            "اللهم صل على سيدنا محمد",
-            "اللهم تب علي",
-            "سبحانك اللهم وبحمدك عدد خلقك ورضا نفسك وزنة عرشك ومداد كلماتك",
-            "سبحان الله",
-            "الحمد لله",
-            "الله أكبر",
-            "لا حول ولا قوة إلا بالله العلي العظيم"
-        ];
+    setInterval(updateCountdown, 1);
 
-        const colors = [
-            "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6", "#FFBF33", "#8D33FF", "#FF5733", "#33FF57"
-        ];
+    // زر الإعجاب
+    let likeCount = localStorage.getItem('likeCount') ? parseInt(localStorage.getItem('likeCount')) : 0;
+    const likeButton = document.getElementById('like-button');
+    const likeCountDisplay = document.getElementById('like-count');
+    likeCountDisplay.innerText = likeCount;
 
-        let messageIndex = 0;
+    const messages = [
+        "سبحان الله وبحمده",
+        "سبحان الله العظيم",
+        "اللهم اغفر لي",
+        "اللهم صل على سيدنا محمد",
+        "اللهم تب علي",
+        "سبحانك اللهم وبحمدك عدد خلقك ورضا نفسك وزنة عرشك ومداد كلماتك",
+        "سبحان الله",
+        "الحمد لله",
+        "الله أكبر",
+        "لا حول ولا قوة إلا بالله العلي العظيم"
+    ];
 
-        function showMessage() {
-            const messageText = messages[messageIndex];
-            const color = colors[messageIndex % colors.length];
-            messageIndex = (messageIndex + 1) % messages.length;
+    const colors = [
+        "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6", "#FFBF33", "#8D33FF", "#FF5733", "#33FF57"
+    ];
 
-            const messageContainer = document.getElementById('message-container');
-            messageContainer.innerText = messageText;
-            messageContainer.style.color = color;
-            messageContainer.style.opacity = 1;
+    let messageIndex = 0;
 
-            const duration = messageText.length < 20 ? 2000 : 4000;
+    function showMessage() {
+        const messageText = messages[messageIndex];
+        const color = colors[messageIndex % colors.length];
+        messageIndex = (messageIndex + 1) % messages.length;
 
-            const countdownSection = document.getElementById('countdown');
-            countdownSection.style.transform = 'translateY(50px)';
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.innerText = messageText;
+        messageContainer.style.color = color;
+        messageContainer.style.opacity = 1;
 
-            setTimeout(() => {
-                messageContainer.style.opacity = 0;
-                countdownSection.style.transform = 'translateY(0)';
-            }, duration - 1000);
+        const duration = messageText.length < 20 ? 2000 : 4000;
 
-            setTimeout(() => {
-                messageContainer.innerText = '';
-            }, duration);
-        }
+        const countdownSection = document.getElementById('countdown');
+        countdownSection.style.transform = 'translateY(50px)';
 
-        likeButton.addEventListener('click', () => {
-            likeButton.classList.add('liked');
-            likeCount++;
-            likeCountDisplay.innerText = likeCount;
+        setTimeout(() => {
+            messageContainer.style.opacity = 0;
+            countdownSection.style.transform = 'translateY(0)';
+        }, duration - 1000);
 
-            const animation = document.createElement('div');
-            animation.className = 'like-animation';
-            animation.innerHTML = '&hearts;';
-            document.body.appendChild(animation);
+        setTimeout(() => {
+            messageContainer.innerText = '';
+        }, duration);
+    }
 
-            setTimeout(() => {
-                animation.style.fontSize = '10em';
-                animation.style.opacity = '1';
-                animation.style.transform = 'translate(-50%, -50%) scale(5)';
-            }, 10);
+    likeButton.addEventListener('click', () => {
+        likeButton.classList.add('liked');
+        likeCount++;
+        localStorage.setItem('likeCount', likeCount);
+        likeCountDisplay.innerText = likeCount;
 
-            setTimeout(() => {
-                animation.style.opacity = 0;
-            }, 500);
+        const animation = document.createElement('div');
+        animation.className = 'like-animation';
+        animation.innerHTML = '&hearts;';
+        document.body.appendChild(animation);
 
-            setTimeout(() => {
-                animation.remove();
-            }, 1000);
+        setTimeout(() => {
+            animation.style.fontSize = '10em';
+            animation.style.opacity = '1';
+            animation.style.transform = 'translate(-50%, -50%) scale(5)';
+        }, 10);
 
-            showMessage();
-        });
+        setTimeout(() => {
+            animation.style.opacity = 0;
+        }, 500);
+
+        setTimeout(() => {
+            animation.remove();
+        }, 1000);
+
+        showMessage();
+    });
     </script>
 </body>
 </html>
