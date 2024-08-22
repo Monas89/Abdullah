@@ -131,9 +131,9 @@
         <div id="hijri-date"></div>
     </div>
 
-    <script>
+<script>
     function updateCountdown() {
-        const targetDate = new Date('August 22, 2024 17:21:00').getTime();
+        const targetDate = new Date('August 22, 2024 05:30:00').getTime();
         const now = new Date().getTime();
         let difference = targetDate - now;
 
@@ -185,7 +185,7 @@
     function showMessage() {
         const messageText = messages[messageIndex];
         const color = colors[messageIndex % colors.length];
-        messageIndex = messageIndex + 1) % messages.length;
+        messageIndex = (messageIndex + 1) % messages.length;
 
         const messageContainer = document.getElementById('message-container');
         messageContainer.innerText = messageText;
@@ -195,7 +195,6 @@
         const duration = messageText.length < 20 ? 2000 : 4000;
 
         const countdownSection = document.getElementById('countdown');
-     
         countdownSection.style.transform = 'translateY(50px)';
 
         setTimeout(() => {
@@ -235,6 +234,6 @@
 
         showMessage();
     });
-    </script>
+</script>
 </body>
 </html>
